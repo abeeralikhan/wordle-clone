@@ -1,7 +1,18 @@
+:root {
+  --clr-primary-01: #121213;
+  --clr-primary-02: #818384;
+
+  --clr-secondary-01: #538d4e;
+  --clr-secondary-02: #b59f3b;
+  --clr-secondary-03: #3a3a3c;
+
+  --clr-neutral-01: #fff;
+}
+
 body {
   margin: 0;
   padding: 0;
-  background-color: #121213;
+  background-color: var(--clr-primary-01);
 }
 
 .board {
@@ -19,7 +30,8 @@ body {
 .tile {
   width: 62px;
   height: 62px;
-  background-color: #3a3a3c;
+  background-color: var(--clr-primary-01);
+  border: 2px solid var(--clr-secondary-03);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -27,8 +39,27 @@ body {
 }
 
 .tile span {
-  color: #ffffff;
+  color: var(--clr-neutral-01);
   font-family: Arial, Helvetica, sans-serif;
   font-size: 32px;
   font-weight: 700;
+}
+
+.correct-position {
+  background-color: var(--clr-secondary-01);
+}
+
+/* Correct letter and position */
+.correct-letter-position {
+  background-color: var(--clr-secondary-02);
+}
+
+/* Only correct letter but not correct position */
+.incorrect-letter-position {
+  background-color: var(--clr-secondary-03);
+}
+
+/* Incorrect letter and position */
+.incorrect-letter-position {
+  background-color: var(--clr-secondary-02);
 }
