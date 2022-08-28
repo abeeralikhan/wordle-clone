@@ -40,7 +40,7 @@ body {
 }
 
 .active {
-  border-color: var(--clr-secondary-04) !important;
+  border-color: var(--clr-secondary-04);
 }
 
 .tile span {
@@ -50,21 +50,20 @@ body {
   font-weight: 700;
 }
 
-.correct-position {
+.correct-letter-position {
+  border-color: var(--clr-secondary-01) !important;
   background-color: var(--clr-secondary-01);
 }
 
 /* Correct letter and position */
-.correct-letter-position {
+.correct-letter {
+  border-color: var(--clr-secondary-02) !important;
   background-color: var(--clr-secondary-02);
-}
-
-/* Only correct letter but not correct position */
-.incorrect-letter-position {
-  background-color: var(--clr-secondary-03);
 }
 
 /* Incorrect letter and position */
 .incorrect-letter-position {
-  background-color: var(--clr-secondary-02);
+  border-color: var(--clr-secondary-03) !important;
+
+  background-color: var(--clr-secondary-03);
 }

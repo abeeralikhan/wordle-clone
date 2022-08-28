@@ -1,10 +1,15 @@
 const gameBoard = document.querySelector(".board");
 const body = document.querySelector("body");
 
+// classes name
+const correct = "correct-letter-position";
+const incorrect = "incorrect-letter-position";
+const correctLetter = "correct-letter";
+
 let currentRow = 0; // it's the row user is currently on
 const typedWord = []; // it stores the characters of the current row
 
-let theWORD; // the word to be guessed
+let theWORD = getRandomWord(); // the word to be guessed
 
 // listening to key presses on the body object
 body.addEventListener("keydown", (e) => {
@@ -58,13 +63,13 @@ function updateEnteredWords(rowNum) {
 
 // Add and remove active class from tile's parent element
 function toggleParentActiveState(childId, command = "add") {
-  const tileParent = document.getElementById(childId).parentElement;
+  const tileParent = getParentElement(childId);
   if (command === "add") {
     if (!tileParent.classList.contains("active"))
-      tileParent.classList.add("active");
+      tileParent.classList.add("active", "animate__bounceIn");
   } else {
     if (tileParent.classList.contains("active"))
-      tileParent.classList.remove("active");
+      tileParent.classList.remove("active", "animate__bounceIn");
   }
 }
 
@@ -73,11 +78,16 @@ function getBoxId(i, j) {
   return `t${i}${j}`;
 }
 
-// TODO: Generates a random word at the beginning of the game
-function generateRandomWord() {
+function getParentElement(id) {
+  const element = document.getElementById(id);
+  return element ? element.parentElement : null;
+}
+// TODO: Sets a random word to guess
+function getRandomWord() {
   // TODO: Load words
   // TODO: Get a random number
   // TODO: Assign the word
+  return capitilize("creed");
 }
 
 // Capitalizes letter
@@ -109,10 +119,6 @@ function updateKeyboard(word) {}
 
 // TODO: Update colors of the current row with respect to the letters
 function updateRowColors(word) {}
-// TODO: Check if entered word is equal to the generated word
-// word: List
-// returns --> Boolean
-function checkWinCondition(word) {}
 
 // TODO: Check if the random word has a letter
 function hasLetter(char) {}
@@ -149,6 +155,10 @@ function removeLastCharacter() {
   typedWord.pop();
 }
 
+function listToString(list) {
+  return list.join("");
+}
+
 // TODO: Deletes all the children elements inside the game boards
 function clearBoard() {}
 
@@ -160,24 +170,30 @@ function handleBackCommand() {
   removeLastCharacter();
   // removing the active state from tile's parent element
   const typedWordLength = typedWord.length;
-  console.log(typedWord);
+  // console.log(typedWord);
   // if (typedWordLength > 0) {
   toggleParentActiveState(getBoxId(currentRow, typedWordLength), "remove");
   //
 }
 
 function handleEnterCommand() {
-  if (isValidEnglishWord(typedWord.join(""))) {
+  // typed word is an array, converting it to string to process it
+  const guess = listToString(typedWord);
+  if (isValidEnglishWord(guess)) {
     if (currentRow <= 4) {
-      // TODO: ADD SOME ANIMATION
-      currentRow++;
-      clearTypedWord();
-      // for every entered word check if it matches with the randomWord
-      //   validateWord();
-      return;
+      updateColors(guess);
+      const result = checkWinCondition(guess);
+
+      if (!result) {
+        currentRow++;
+        clearTypedWord();
+      } else {
+        // make a function that does something
+        alert("You guessed the word!");
+      }
     } else {
       // handleGameEnd something like this
-      alert("Thanks for Playing");
+      alert("Better Luck next time!");
     }
   }
 }
@@ -187,6 +203,24 @@ function handleNewCharacter(char) {
   if (isValidCharacter(char)) typedWord.push(capitilize(char));
 }
 
-generateBoard();
+function updateColors(guess) {
+  for (let i = 0; i <= theWORD.length; i++) {
+    const parent = getParentElement(getBoxId(currentRow, i));
+    if (parent) {
+      parent.classList.add("animate__flipInX");
+      if (theWORD[i] === guess[i]) parent.classList.add(correct);
+      else if (theWORD.includes(guess[i])) parent.classList.add(correctLetter);
+      else parent.classList.add(incorrect);
+    }
+  }
+}
 
+// TODO: Check if entered word is equal to the generated word
+// word: List
+// returns --> Boolean
+function checkWinCondition(guess) {
+  return guess === theWORD;
+}
+
+generateBoard();
 // element.parentElement
