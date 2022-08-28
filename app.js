@@ -92,7 +92,7 @@ function capitilize(row) {
 
 // TODO: Validate entered character is not a special character or a number
 function isValidCharacter(char) {
-  return "qwertyuiopasdfghjklzxcvbnm".includes(char);
+  return "QWERTYUIOPASDFGHJKLZXCVBNM".includes(capitilize(char));
 }
 
 // Temp
