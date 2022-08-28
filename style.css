@@ -5,6 +5,7 @@
   --clr-secondary-01: #538d4e;
   --clr-secondary-02: #b59f3b;
   --clr-secondary-03: #3a3a3c;
+  --clr-secondary-04: #56565a;
 
   --clr-neutral-01: #fff;
 }
@@ -36,6 +37,10 @@ body {
   justify-content: center;
   align-items: center;
   margin: 0.15em;
+}
+
+.active {
+  border-color: var(--clr-secondary-04) !important;
 }
 
 .tile span {

@@ -27,11 +27,28 @@ function generateBoard() {
 // Renders new letter on the board
 // runs everytime user type some letter
 function updateEnteredWords(rowNum) {
-  for (let i = 0; i <= 4; i++) {
+  for (let i = 0; i <= typedWord.length; i++) {
     const char = typedWord[i];
-    document.getElementById(getBoxId(rowNum, i)).textContent =
-      char === undefined ? "" : char;
+    const id = getBoxId(rowNum, i);
+    const tile = document.getElementById(id);
+
+    // the loop is running uptill the length of the typedArray
+    // so set character only if tile is not null
+    tile !== null ? (tile.textContent = char === undefined ? "" : char) : "";
+
+    // to avoid making the next cell active
+    if (i < typedWord.length) {
+      tile.parentElement.classList.contains("active")
+        ? ""
+        : toggleParentActiveState(id);
+    }
   }
+}
+
+// Add and remove active class from tile's parent element
+function toggleParentActiveState(childId) {
+  const tileParent = document.getElementById(childId).parentElement;
+  tileParent.classList.toggle("active");
 }
 
 // Returns the transformed row and column index to "t12" format
@@ -46,12 +63,6 @@ function generateRandomWord() {
   // TODO: Assign the word
 }
 
-// Returns a random number between 0 and n
-// returns --> Number
-function generateRandomNumber(n) {
-  return Math.floor(Math.random() * n);
-}
-
 // Capitalizes letter
 // row: String
 function capitilize(row) {
@@ -62,14 +73,14 @@ function capitilize(row) {
   return capitilized;
 }
 
-// TODO: Validate if the entered is valid English Language word
-function isValidEnglishWord(row) {
-  return true;
-}
-
 // TODO: Validate entered character is not a special character or a number
 function isValidCharacter(char) {
   return "qwertyuiopasdfghjklzxcvbnm".includes(char);
+}
+
+// Temp
+function isValidEnglishWord(word) {
+  return true;
 }
 
 // TODO: Generates a on screen keyboard on the screen
@@ -123,6 +134,22 @@ function clearBoard() {}
 // TODO: Deletes all the children elements inside the keyboard
 function clearKeyboard() {}
 
+function handleBackCommand() {
+  // removing the last issued letter from the array
+  typedWord.pop();
+
+  // removing the active state from tile's parent element
+  const typedWordLength = typedWord.length;
+  if (typedWordLength > 0) {
+    toggleParentActiveState(getBoxId(currentRow, typedWordLength));
+  }
+}
+
+function handleNewCharacter(char) {
+  // checking if entered character is valid or not
+  if (isValidCharacter(char)) typedWord.push(capitilize(char));
+}
+
 body.addEventListener("keydown", (e) => {
   const key = e.key;
 
@@ -140,17 +167,12 @@ body.addEventListener("keydown", (e) => {
     }
   }
 
-  if (key === "Backspace" && typedWord.length >= 0) {
-    typedWord.pop();
-  } else if (typedWord.length <= 4) {
-    // checking if entered character is valid or not
-    if (isValidCharacter(key)) {
-      const char = capitilize(key);
-      typedWord.push(char);
-    }
-  }
+  if (key === "Backspace" && typedWord.length >= 0) handleBackCommand();
+  else if (typedWord.length <= 4) handleNewCharacter(key);
 
   updateEnteredWords(currentRow);
 });
 
 generateBoard();
+
+// element.parentElement
