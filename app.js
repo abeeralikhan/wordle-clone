@@ -6,6 +6,17 @@ const typedWord = []; // it stores the characters of the current row
 
 let theWORD; // the word to be guessed
 
+// listening to key presses on the body object
+body.addEventListener("keydown", (e) => {
+  const key = e.key;
+
+  if (typedWord.length === 5 && key === "Enter") handleEnterCommand();
+  else if (key === "Backspace" && typedWord.length >= 0) handleBackCommand();
+  else if (typedWord.length <= 4) handleNewCharacter(key);
+
+  updateEnteredWords(currentRow);
+});
+
 // Generates the wordle board on the screen
 function generateBoard() {
   for (let i = 0; i <= 5; i++) {
@@ -46,9 +57,15 @@ function updateEnteredWords(rowNum) {
 }
 
 // Add and remove active class from tile's parent element
-function toggleParentActiveState(childId) {
+function toggleParentActiveState(childId, command = "add") {
   const tileParent = document.getElementById(childId).parentElement;
-  tileParent.classList.toggle("active");
+  if (command === "add") {
+    if (!tileParent.classList.contains("active"))
+      tileParent.classList.add("active");
+  } else {
+    if (tileParent.classList.contains("active"))
+      tileParent.classList.remove("active");
+  }
 }
 
 // Returns the transformed row and column index to "t12" format
@@ -128,6 +145,10 @@ function clearTypedWord() {
   typedWord.length = 0;
 }
 
+function removeLastCharacter() {
+  typedWord.pop();
+}
+
 // TODO: Deletes all the children elements inside the game boards
 function clearBoard() {}
 
@@ -136,12 +157,28 @@ function clearKeyboard() {}
 
 function handleBackCommand() {
   // removing the last issued letter from the array
-  typedWord.pop();
-
+  removeLastCharacter();
   // removing the active state from tile's parent element
   const typedWordLength = typedWord.length;
-  if (typedWordLength > 0) {
-    toggleParentActiveState(getBoxId(currentRow, typedWordLength));
+  console.log(typedWord);
+  // if (typedWordLength > 0) {
+  toggleParentActiveState(getBoxId(currentRow, typedWordLength), "remove");
+  //
+}
+
+function handleEnterCommand() {
+  if (isValidEnglishWord(typedWord.join(""))) {
+    if (currentRow <= 4) {
+      // TODO: ADD SOME ANIMATION
+      currentRow++;
+      clearTypedWord();
+      // for every entered word check if it matches with the randomWord
+      //   validateWord();
+      return;
+    } else {
+      // handleGameEnd something like this
+      alert("Thanks for Playing");
+    }
   }
 }
 
@@ -149,29 +186,6 @@ function handleNewCharacter(char) {
   // checking if entered character is valid or not
   if (isValidCharacter(char)) typedWord.push(capitilize(char));
 }
-
-body.addEventListener("keydown", (e) => {
-  const key = e.key;
-
-  if (typedWord.length === 5 && key === "Enter") {
-    if (isValidEnglishWord(typedWord.join(""))) {
-      if (currentRow <= 4) {
-        // TODO: ADD SOME ANIMATION
-        currentRow++;
-        clearTypedWord();
-        //   validateWord();
-        return;
-      } else {
-        alert("Thanks for Playing");
-      }
-    }
-  }
-
-  if (key === "Backspace" && typedWord.length >= 0) handleBackCommand();
-  else if (typedWord.length <= 4) handleNewCharacter(key);
-
-  updateEnteredWords(currentRow);
-});
 
 generateBoard();
 
