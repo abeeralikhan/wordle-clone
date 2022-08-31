@@ -5,6 +5,8 @@ Each guess must be a valid 5-letter word. Hit the enter button to submit.
 
 After each guess, the color of the tiles will change to show how close your guess was to the word.
 
+[Play it here](https://wordle-clone-abeer.netlify.app/)
+
 ## Preview
 - Game Board
 ![Game Board](https://github.com/abeeralikhan/wordle-clone/blob/main/images/img1.png?raw=true)
