@@ -17,4 +17,3 @@ After each guess, the color of the tiles will change to show how close your gues
 
 - Finally, guessing the correct word!
 ![Cells](https://github.com/abeeralikhan/wordle-clone/blob/main/images/img4.png?raw=true)
-
